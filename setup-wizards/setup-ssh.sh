@@ -32,7 +32,7 @@ fi
 
 
 echo ""
-echo "The script is now ready to install and change the configuration files."
+echo "The script is now ready to setup the configuration files."
 
 read -p "Type yes if you want to continue: " answer
 
@@ -43,21 +43,6 @@ then
 	echo "Script canceled."
 	exit
 fi
-
-
-
-echo ""
-
-pacman-install-packages.sh "openssh"
-
-returnvalue=$?
-
-if [ $returnvalue != 0 ]
-then
-	echo "This script can't execute without the required packages."
-	exit
-fi
-
 
 
 echo ""
@@ -178,4 +163,5 @@ echo ""
 echo "Restarting sshd.service"
 systemctl restart sshd
 
-
+echo ""
+echo "Setup complete"
