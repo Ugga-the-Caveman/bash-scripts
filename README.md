@@ -15,8 +15,8 @@ unzip the files.
 
 Install scripts
 ```
-chmod 755 bash-config-main/scripts -R
+chmod 755 bash-scripts-main -R
 ```
 ```
-sudo mv bash-config-main/scripts /usr/bash-scripts
+sudo mv -vi bash-scripts-main /usr/bash-scripts
 ```
