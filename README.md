@@ -18,5 +18,5 @@ Install scripts
 chmod 755 bash-scripts-main -R
 ```
 ```
-sudo mv -vi bash-scripts-main /usr/bash-scripts
+sudo mv -vi bash-scripts-main/* /usr/bash-scripts
 ```
