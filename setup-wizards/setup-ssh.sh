@@ -82,7 +82,7 @@ if [ "$publicKey" == "" ]
 then
 	echo "No key entered. Check /home/$benutzername/.ssh/authorized_keys"
 else
-	echo $publicKey > /home/$benutzername/.ssh/authorized_keys
+	echo "$publicKey" > /home/$benutzername/.ssh/authorized_keys
 fi
 
 
