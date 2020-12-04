@@ -15,6 +15,8 @@ echo "+-------------------------+"
 echo "| SSH Server Setup Script |"
 echo "+-------------------------+"
 
+groupName="ssh-grp"
+
 
 echo ""
 echo "Enter the port that should be used for new ssh connections."
@@ -30,6 +32,16 @@ else
 fi
 
 
+echo "Enter a user with homedirectory and sudo power. This user will be added to $groupName."
+read -p "Enter username: " benutzername
+
+if [ "$(getent passwd $benutzername | cut -d: -f6)" == "" ]
+then
+	echo "This is not a valid username."
+	exit
+fi
+
+homedirectory="$(getent passwd $benutzername | cut -d: -f6)"
 
 echo ""
 echo "The script is now ready to setup the ssh configuration."
@@ -47,8 +59,6 @@ fi
 
 echo ""
 
-groupName="ssh-grp"
-
 groupExist=$(cat /etc/group | grep "$groupName:")
 if [ "$groupExist" == "" ]
 then
@@ -59,30 +69,21 @@ else
 fi
 
 
-echo "The entered user will be added to $groupName."
-read -p "Enter username: " benutzername
-
-if [ "$benutzername" == "" ]
-then
-	echo "This is not a valid username."
-	exit
-fi
-
 gpasswd -a $benutzername $groupName
 
 
 echo ""
-mkdir -v /home/$benutzername/.ssh
+mkdir -v $homedirectory/.ssh
 
-echo "Generate a keypair on your machine. Enter the public key to append it to authorized_keys"
+echo "Generate a keypair on your local machine. Enter the public key to append it to authorized_keys"
 
-read -p "Enter username: " publicKey
+read -p "Enter public key: " publicKey
 
 if [ "$publicKey" == "" ]
 then
-	echo "No key entered. Check /home/$benutzername/.ssh/authorized_keys"
+	echo "No key entered. Check $homedirectory/.ssh/authorized_keys"
 else
-	echo "$publicKey" > /home/$benutzername/.ssh/authorized_keys
+	echo "$publicKey" > $homedirectory/.ssh/authorized_keys
 fi
 
 
