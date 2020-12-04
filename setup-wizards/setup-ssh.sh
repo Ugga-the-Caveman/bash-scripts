@@ -32,7 +32,7 @@ fi
 
 
 echo ""
-echo "The script is now ready to setup the configuration files."
+echo "The script is now ready to setup the ssh configuration."
 
 read -p "Type yes if you want to continue: " answer
 
@@ -58,6 +58,17 @@ else
 	echo "A group called $groupName does allready exist."
 fi
 
+
+echo "The entered user will be added to $groupName."
+read -p "Enter username: " benutzername
+
+if [ "$benutzername" != "" ]
+then
+	echo "This is not a valid username."
+	exit
+fi
+
+usermod -a -G $groupName $benutzername
 
 
 
