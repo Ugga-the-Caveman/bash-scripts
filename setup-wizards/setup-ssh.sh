@@ -62,7 +62,7 @@ fi
 echo "The entered user will be added to $groupName."
 read -p "Enter username: " benutzername
 
-if [ "$benutzername" != "" ]
+if [ "$benutzername" == "" ]
 then
 	echo "This is not a valid username."
 	exit
