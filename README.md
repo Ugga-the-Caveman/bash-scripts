@@ -1,7 +1,3 @@
-# bash-scripts
-my collection of bash scripts.
-
-
 ### installation
 Download all files from this repository.
 ```
