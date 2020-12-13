@@ -1,5 +1,5 @@
 # bash-scripts
-a collection of bash scripts for Linux.
+my collection of bash scripts.
 
 
 ### installation
