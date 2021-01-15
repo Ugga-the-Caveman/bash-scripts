@@ -13,6 +13,9 @@ echo "+-------------------------------+"
 echo "| iptables Configuration Script |"
 echo "+-------------------------------+"
 echo ""
+echo "This script will setup a simple stateful firewall configuration."
+echo ""
+
 
 
 sshPort=$(cat /etc/ssh/sshd_config | grep Port | sed 's/[^0-9]*//g')
@@ -70,24 +73,28 @@ iptables -A INPUT -i lo -j ACCEPT
 #iptables -A INPUT -p 41 -j ACCEPT
 
 
+
 #DROP traffic with an "INVALID" state match.
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
-
-
-iptables -N CUSTOM
-iptables -A INPUT -j CUSTOM
 
 
 #alle eingehenden packete aktzeptieren, die zu einer verbindung gehören, die schon aufgebaut ist.
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
 
-#Now we attach the NEW chain to the INPUT chain to handle all new incoming connections.
+#The next rule will accept all new incoming ICMP echo requests, also known as pings.
+iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+
+
+#Now we attach the TCP and UDP chains to the INPUT chain to handle all new incoming connections.
 #Once a connection is accepted by either TCP or UDP chain, it is handled by the RELATED/ESTABLISHED traffic rule.
 
-iptables -N NEW
-iptables -A INPUT -p tcp --syn -m conntrack --ctstate NEW -j NEW
-iptables -A INPUT -p udp -m conntrack --ctstate NEW -j NEW
+iptables -N TCP
+iptables -A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
+
+iptables -N UDP
+iptables -A INPUT -p udp -m conntrack --ctstate NEW -j UDP
+
 
 
 #We reject TCP connections with TCP RESET packets and UDP streams with ICMP port unreachable messages if the ports are not opened.
@@ -141,22 +148,24 @@ ip6tables -A INPUT -p 41 -j ACCEPT
 ip6tables -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 
-ip6tables -N CUSTOM
-ip6tables -A INPUT -j CUSTOM
-
-
 #alle eingehenden packete aktzeptieren, die zu einer verbindung gehören, die schon aufgebaut ist.
 
 ip6tables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
 
+#The next rule will accept all new incoming ICMP echo requests, also known as pings.
 
-#Now we attach the NEW chains to the INPUT chain to handle all new incoming connections.
+ip6tables -A INPUT -p ipv6-icmp --icmpv6-type 128 -m conntrack --ctstate NEW -j ACCEPT
+
+
+#Now we attach the TCP and UDP chains to the INPUT chain to handle all new incoming connections.
 #Once a connection is accepted by either TCP or UDP chain, it is handled by the RELATED/ESTABLISHED traffic rule.
 
-ip6tables -N NEW
-ip6tables -A INPUT -p tcp --syn -m conntrack --ctstate NEW -j NEW
-ip6tables -A INPUT -p udp -m conntrack --ctstate NEW -j NEW
+ip6tables -N TCP
+ip6tables -A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
+
+ip6tables -N UDP
+ip6tables -A INPUT -p udp -m conntrack --ctstate NEW -j UDP
 
 
 #We reject TCP connections with TCP RESET packets and UDP streams with ICMP port unreachable messages if the ports are not opened.
@@ -171,26 +180,23 @@ ip6tables -A INPUT -p udp -j REJECT --reject-with icmp6-adm-prohibited
 
 ip6tables -A INPUT -j REJECT --reject-with icmp6-adm-prohibited
 
+#---
 
 
 
-#The next rule will accept all new incoming ICMP echo requests, also known as pings.
-iptables -A CUSTOM -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
-ip6tables -A CUSTOM -p ipv6-icmp --icmpv6-type 128 -m conntrack --ctstate NEW -j ACCEPT
+echo "Setting up SSH configuration..."
 
 
-
-
-echo "Creating SSH chain..."
 
 iptables -N SSH
-iptables -A NEW -p tcp --dport $sshPort -j SSH
+iptables -A TCP -p tcp --dport $sshPort -j SSH
 iptables -A SSH -j ACCEPT
 
 
 ip6tables -N SSH
-ip6tables -A NEW -p tcp --dport $sshPort -j SSH
+ip6tables -A TCP -p tcp --dport $sshPort -j SSH
 ip6tables -A SSH -j ACCEPT
+
 
 
 
@@ -209,4 +215,9 @@ ip6tables -P OUTPUT ACCEPT
 
 
 
-echo "iptables setup completed."
+echo "Setup complete."
+
+
+
+echo ""
+echo "Keep in Mind, that you must save the configuration to make it persistent."
