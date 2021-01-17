@@ -9,7 +9,7 @@ function fnc_help()
 	echo "Description: Displays colors in the shell."
 	echo ""
 	echo "Usage: $scriptName [Option]..."
-	echo ""
+	echo "Options:"
 	echo " -h,--help		prints this help message"
 	echo " -v,--version		prints script version"
 	echo ""

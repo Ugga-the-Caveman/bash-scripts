@@ -76,24 +76,21 @@ fi
 
 
 
-
-
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "en_DK.UTF-8 UTF-8" >> /etc/locale.gen
-echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
-echo "/etc/locale.gen created"
-
-locale-gen
-
 echo "LANG=en_DK.UTF-8" > /etc/locale.conf
 echo "LANGUAGE=en_US.UTF-8" >> /etc/locale.conf
 echo "LC_MONETARY=de_DE.UTF-8" >> /etc/locale.conf
+
 echo "/etc/locale.conf created"
 
 echo "KEYMAP=de-latin1" > /etc/vconsole.conf
 echo "FONT=lat9w-16" >> /etc/vconsole.conf
+
 echo "/etc/vconsole.conf created"
 
 ln -sfv /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+echo "en_DK.UTF-8 UTF-8" >> /etc/locale.gen
+echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
 
+locale-gen

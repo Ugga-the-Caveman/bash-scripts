@@ -1,20 +1,27 @@
 #!/bin/bash
 
+version="2021.01.17"
+scriptName=$(basename $BASH_SOURCE)
+
+
 function fnc_help()
 {
-	echo "Usage: backup-system.sh DIRECTORY [Option]..."
-	echo "This script will create a backup of the operating system, into the specified Directory."
+	echo "Description: This script backups / into DIRECTORY using rsync."
+	echo "DIRECTORY must be a subdirectory of /mnt to prevent backup loops."
 	echo ""
-	echo " -h,--help               	prints this help message"
-	echo " -t,--timestamp          	creates a subdirectory, using the current system-date and -time."
-	echo " -s,--subdirectory [name]	creates a subdirectory with the specified name."
+	echo "Usage: $scriptName DIRECTORY [Option]..."
+	echo "Options:"
+	echo " -h,--help		prints this help message"
+	echo " -v,--version		prints script version"
+	echo " -t,--timestamp	creates a subdirectory inside DIRECTORY, using local systemtime as name."
+	echo ""
 	exit
 }
 
-function fnc_exit()
+
+function fnc_version()
 {
-	echo ""
-	fnc_help
+	echo $version
 	exit
 }
 
@@ -123,31 +130,21 @@ function fnc_runtime()
 }
 
 
-## Checking for root privileges
-if [ "$(whoami)" != "root" ]
-then
-	echo "This script must be run as root."
-	exit
-fi
 
 
 
-## Checking parameters
-if [ -z "$1" ];
-then
-	echo "You did not provide any parameters."
-	fnc_exit
-fi
 
+
+
+#get parameters
+option_version=false
 option_help=false
-option_t=false
-option_s=false
-subDir=""
+option_timestamp=false
 
 paramArray=( "$@" )
 paramCount=${#paramArray[@]}
 
-for (( index=1; $index<$paramCount; index++ ))
+for (( index=0; $index<$paramCount; index++ ))
 do
 	thisParam="${paramArray[$index]}"
 	
@@ -156,81 +153,83 @@ do
 		option_help=true
 	fi
 	
-	if [ "$thisParam" == "-t" ] || [ "$thisParam" == "--timestamp" ]
+	if [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
-		option_t=true
-		subDir="$(date +%FT%H.%M.%S)"
+		option_version=true
 	fi
 	
-	if [ "$thisParam" == "-s" ] || [ "$thisParam" == "--subdirectory" ]
+	if [ "$thisParam" == "-t" ] || [ "$thisParam" == "--timestamp" ]
 	then
-		option_s=true
-		
-		if [ $((index+1)) -lt $paramCount ]
-		then
-			subDir=${paramArray[$((index+1))]}
-		else
-			echo "Error: Option -s needs a subdirectory name"
-			fnc_exit
-		fi
-		
+		option_timestamp=true
 	fi
 done
+
+
+
+if [ $option_version == true ]
+then
+	fnc_version
+	exit
+fi
+
+
+
+#Title
+echo "$scriptName version $version"
+echo "by Ugga the Caveman"
+echo ""
+
+
 
 if [ $option_help == true ]
 then
 	fnc_help
-	exit
 fi
 
-if [ $option_s == true ] && [ $option_t == true ]
-then
-	echo "Error: You cannot use Option -s and option -t at the same time."
-	fnc_exit
-fi
+
+## Checking for root privileges
+#if [ "$(whoami)" != "root" ]
+#then
+#	echo "This script must be run as root."
+#	exit
+#fi
+
+
+
+
 
 if [ ! -d "$1" ] 
 then
-	echo "$1 is not a directory."
-	fnc_exit
+	echo "Error: DIRECTORY is not a directory."
+	echo ""
+	fnc_help
 fi
 
-if [ "$(echo $1 | grep "^/mnt")" == "" ]
-then
-	echo "The Backup-Directory has to be a subdirectory of /mnt/."
-	fnc_exit
-fi
 
 # remove trailing /'s
-backupDir=$(echo $1 | sed 's:/*$::')
+thisDir=$(echo "$1" | sed 's:/*$::')
 
 
-if [ ! "$subDir" == "" ]
+if [ "$(echo $thisDir | grep "^/mnt/")" == "" ]
 then
-	temp=$(echo $subDir | sed 's:/*$::')
-	backupDir=$backupDir/$temp
+	echo "Error: DIRECTORY is not a subdirectory of /mnt."
+	echo ""
+	fnc_help
+fi
+
+
+if [ $option_timestamp == true ]
+then
+	thisDir+="/$(date +%FT%H.%M.%S)"
 fi
 
 
 
 
-
+echo "The script is about to backup the system."
+echo "All files in DIRECTORY will be overwritten."
+echo "DIRECTORY: $thisDir"
 echo ""
-echo "trying to show rsync version..."
-rsync --version
-
-
-echo ""
-echo "Ready to backup the system into $backupDir?"
-
-if [ -d "$backupDir" ]
-then
-	if [ "$(ls $backupDir)" != "" ]
-	then
-		echo "Attention!!! This directory is not empty."
-	fi
-fi
-
 read -p "Are you sure you want to continue? [y/N]: " answer
 
 if [ "${answer:0:1}" == "y" ] || [ "${answer:0:1}" == "Y" ]
@@ -239,7 +238,7 @@ then
 	
 	startingtime=`date +%s`
 	
-	rsync -aAXvh --progress --delete / --exclude={"/lost+found","/dev/*","/mnt/*","/proc/*","/run/*","/sys/*","/tmp/*"} "$backupDir"
+	rsync -aAXvh --progress --delete / --exclude={"/lost+found","/dev/*","/mnt/*","/proc/*","/run/*","/sys/*","/tmp/*"} "$thisDir"
 	
 	endingtime=`date +%s`
 	runtime=$((endingtime-startingtime))
@@ -247,7 +246,7 @@ then
 	echo ""
 	echo -n "Backup completed after "; fnc_runtime $runtime
 	echo ""
-	
 else
 	echo "Backup canceled."
 fi
+
