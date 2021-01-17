@@ -30,8 +30,7 @@ option_help=false
 paramArray=( "$@" )
 paramCount=${#paramArray[@]}
 
-for (( index=0
-; $index<$paramCount; index++ ))
+for (( index=0; $index<$paramCount; index++ ))
 do
 	thisParam="${paramArray[$index]}"
 	
