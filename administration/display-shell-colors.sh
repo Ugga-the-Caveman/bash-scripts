@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.01.14"
+version="2021.01.17"
 scriptName=$(basename $BASH_SOURCE)
 
 
@@ -68,9 +68,6 @@ then
 	fnc_help
 	exit
 fi
-
-
-
 
 
 
