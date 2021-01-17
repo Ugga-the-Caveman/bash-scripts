@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-version="2021.01.15"
+version="2021.01.17"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
