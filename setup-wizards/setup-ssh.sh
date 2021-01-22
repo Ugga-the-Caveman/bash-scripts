@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-source run-as-root.sh
 if [ "$(whoami)" != "root" ]
 then
 	echo "This script must be run as root."
