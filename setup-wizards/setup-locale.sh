@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-version="2021.01.17"
+version="2021.01.27"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -12,8 +12,8 @@ function fnc_version()
 
 function fnc_help()
 {
-	echo "Description: Write random bits to BLOCKDEVICE to securely erase all data from it."
-	echo "Usage: shred-blockdevice.sh BLOCKDEVICE [Option]..."
+	echo "Description: sets up german locale configuration."
+	echo "Usage: $scriptName [Option]..."
 	echo ""
 	echo " -h,--help		prints this help message"
 	echo " -v,--version		prints script version"
@@ -76,21 +76,39 @@ fi
 
 
 
+
+
 echo "LANG=en_DK.UTF-8" > /etc/locale.conf
 echo "LANGUAGE=en_US.UTF-8" >> /etc/locale.conf
 echo "LC_MONETARY=de_DE.UTF-8" >> /etc/locale.conf
 
-echo "/etc/locale.conf created"
+echo "#/etc/locale.conf"
+cat /etc/locale.conf
+echo ""
+
+
+
 
 echo "KEYMAP=de-latin1" > /etc/vconsole.conf
 echo "FONT=lat9w-16" >> /etc/vconsole.conf
 
-echo "/etc/vconsole.conf created"
+echo "#/etc/vconsole.conf"
+cat /etc/vconsole.conf
+echo ""
+
+
+
 
 ln -sfv /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+
+
 
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "en_DK.UTF-8 UTF-8" >> /etc/locale.gen
 echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
 
+echo ""
+
 locale-gen
+
