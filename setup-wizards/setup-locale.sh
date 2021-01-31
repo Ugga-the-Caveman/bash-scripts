@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-version="2021.01.27"
+version="2021.01.31"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -37,11 +37,14 @@ do
 	if [ "$thisParam" == "-h" ] || [ "$thisParam" == "--help" ]
 	then
 		option_help=true
-	fi
-	
-	if [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
+	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
+	else
+		echo "error: invalid option $thisParam"
+		echo ""
+		fnc_help
+		exit
 	fi
 done
 
