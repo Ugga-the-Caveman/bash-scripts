@@ -7,12 +7,11 @@ unzip the files.
 ```
 7z x main.zip
 ```
-
-
-Install scripts
+Make files executable.
 ```
 chmod 755 bash-scripts-main -R
 ```
+Move scripts into your script directory
 ```
 sudo mv -vi bash-scripts-main/* /usr/bash-scripts
 ```
