@@ -3,6 +3,16 @@
 version="2021.01.31"
 scriptName=$(basename $BASH_SOURCE)
 
+function fnc_title()
+{
+	echo "+-------------------------------+"
+	echo "| iptables Configuration Script |"
+	echo "+-------------------------------+"
+	echo "version $version"
+	echo "by Ugga the Caveman"
+	echo ""
+}
+
 
 function fnc_help()
 {
@@ -16,23 +26,6 @@ function fnc_help()
 	echo ""
 	exit
 }
-
-
-function fnc_version()
-{
-	echo $version
-	exit
-}
-
-
-
-#Title
-echo "+-------------------------------+"
-echo "| iptables Configuration Script |"
-echo "+-------------------------------+"
-echo "version $version"
-echo "by Ugga the Caveman"
-echo ""
 
 
 
@@ -55,17 +48,28 @@ do
 	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
-		fnc_version
-		exit
 	else
+		fnc_title
+		
 		echo "error: invalid option $thisParam"
 		echo ""
+		
 		fnc_help
 		exit
 	fi
 done
 
 
+
+if [ $option_version == true ]
+then
+	echo $version
+	exit
+fi
+
+
+
+fnc_title
 
 
 
@@ -74,7 +78,6 @@ then
 	fnc_help
 	exit
 fi
-
 
 
 if [ "$(whoami)" != "root" ]
@@ -97,11 +100,15 @@ then
 	if [ "$sshPort" == "" ]
 	then
 		echo "/etc/ssh/sshd_config does not define ssh port."
-		sshPort="22"
 	fi
-
 else
 	echo "/etc/ssh/sshd_config does not exist."
+fi
+
+
+if [ "$sshPort" == "" ]
+then
+	sshPort="22"
 fi
 
 echo "ssh port: $sshPort"
