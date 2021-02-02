@@ -3,7 +3,7 @@
 version="2021.01.31"
 scriptName=$(basename $BASH_SOURCE)
 
-function fnc_title()
+function fnc_printTitle()
 {
 	echo "+-------------------------------+"
 	echo "| iptables Configuration Script |"
@@ -14,15 +14,17 @@ function fnc_title()
 }
 
 
-function fnc_help()
+function fnc_printHelp()
 {
-	echo "Description: Setting up ipv4 and ipv6 iptables."
+	echo "Description: setup iptables for ipv4 and ipv6."
+	echo "The default action is removing all iptables rules and then setup a simple statefull Firewall"
 	echo ""
 	echo "Usage: $scriptName [Option]..."
 	echo ""
 	echo "Options:"
-	echo " -h,--help		prints this help message"
 	echo " -v,--version		prints script version"
+	echo " -h,--help		prints this help message"
+	echo " -f,--flush		Only remove all rules from tables."
 	echo ""
 	exit
 }
@@ -48,16 +50,18 @@ do
 	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
+		
 	else
-		fnc_title
+		fnc_printTitle
 		
 		echo "error: invalid option $thisParam"
 		echo ""
 		
-		fnc_help
+		fnc_printHelp
 		exit
 	fi
 done
+
 
 
 
@@ -69,15 +73,16 @@ fi
 
 
 
-fnc_title
+fnc_printTitle
 
 
 
 if [ $option_help == true ]
 then
-	fnc_help
+	fnc_printHelp
 	exit
 fi
+
 
 
 if [ "$(whoami)" != "root" ]
