@@ -139,6 +139,8 @@ option_version=false
 option_help=false
 option_timestamp=false
 
+thisDir=""
+
 paramArray=( "$@" )
 paramCount=${#paramArray[@]}
 
@@ -149,7 +151,7 @@ do
 	if [ "$thisParam" == "-h" ] || [ "$thisParam" == "--help" ]
 	then
 		option_help=true
-		
+	
 	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
@@ -158,6 +160,10 @@ do
 	then
 		option_timestamp=true
 		
+	elif [ "$thisDir" == "" ]
+	then
+		thisDir=thisParam
+
 	else
 		fnc_printTitle
 		
@@ -200,31 +206,35 @@ fi
 
 
 
-if [ ! -d "$1" ] 
+
+
+
+if [ ! -d "$thisDir" ] 
 then
 	echo "Error: DIRECTORY is not a directory."
 	echo ""
-	fnc_help
+	fnc_printHelp
+	exit
 fi
 
-
-# remove trailing /'s
-thisDir=$(echo "$1" | sed 's:/*$::')
-
+# remove trailing /'s from DIRECTORY
+thisDir=$(echo "$thisDir" | sed 's:/*$::')
 
 if [ "$(echo $thisDir | grep "^/mnt/")" == "" ]
 then
 	echo "Error: DIRECTORY is not a subdirectory of /mnt."
 	echo ""
-	fnc_help
+	fnc_printHelp
+	exit
 fi
+
+
 
 
 if [ $option_timestamp == true ]
 then
 	thisDir+="/$(date +%FT%H.%M.%S)"
 fi
-
 
 
 
