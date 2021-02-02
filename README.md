@@ -1,7 +1,7 @@
 ### installation
 Download all files from this repository.
 ```
-wget https://github.com/Ugga-the-Caveman/bash-scripts/archive/main.zip
+wget https://github.com/Ugga-the-Caveman/ugga-bash-scripts/archive/main.zip
 ```
 unzip the files.
 ```
@@ -9,9 +9,9 @@ unzip the files.
 ```
 Make files executable.
 ```
-chmod 755 bash-scripts-main -R
+chmod 755 ugga-bash-scripts -R
 ```
 Move scripts into your script directory
 ```
-sudo mv -vi bash-scripts-main/* /usr/bash-scripts
+sudo mv -vi ugga-bash-scripts/* /usr/ugga-bash-scripts
 ```
