@@ -162,7 +162,7 @@ do
 		
 	elif [ "$thisDir" == "" ]
 	then
-		thisDir=thisParam
+		thisDir="$thisParam"
 
 	else
 		fnc_printTitle
@@ -209,7 +209,7 @@ fi
 
 
 
-if [ ! -d "$thisDir" ] 
+if [ ! -d $thisDir ] 
 then
 	echo "Error: DIRECTORY is not a directory."
 	echo ""
@@ -218,7 +218,7 @@ then
 fi
 
 # remove trailing /'s from DIRECTORY
-thisDir=$(echo "$thisDir" | sed 's:/*$::')
+thisDir=$(echo $thisDir | sed 's:/*$::')
 
 if [ "$(echo $thisDir | grep "^/mnt/")" == "" ]
 then
