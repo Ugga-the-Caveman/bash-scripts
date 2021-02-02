@@ -16,5 +16,5 @@ Remove all old scripts.
 Then move directory with scripts.
 ```
 sudo rm -r /usr/ugga-bash-scripts
-sudo mv -vi ugga-bash-scripts/* /usr/ugga-bash-scripts
+sudo mv ugga-bash-scripts /usr/
 ```
