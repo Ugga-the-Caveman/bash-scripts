@@ -1,12 +1,20 @@
 #!/bin/bash
 
-version="2021.01.17"
+version="2021.02.02"
 scriptName=$(basename $BASH_SOURCE)
 
 
-function fnc_help()
+function fnc_printTitle()
 {
-	echo "Description: This script backups / into DIRECTORY using rsync."
+	echo "$scriptName version $version"
+	echo "by Ugga the Caveman"
+	echo ""
+}
+
+
+function fnc_printHelp()
+{
+	echo "Description: This script rsyncs / into the given DIRECTORY."
 	echo "DIRECTORY must be a subdirectory of /mnt to prevent backup loops."
 	echo ""
 	echo "Usage: $scriptName DIRECTORY [Option]..."
@@ -18,12 +26,6 @@ function fnc_help()
 	exit
 }
 
-
-function fnc_version()
-{
-	echo $version
-	exit
-}
 
 function fnc_runtime()
 {
@@ -132,10 +134,6 @@ function fnc_runtime()
 
 
 
-
-
-
-
 #get parameters
 option_version=false
 option_help=false
@@ -151,16 +149,23 @@ do
 	if [ "$thisParam" == "-h" ] || [ "$thisParam" == "--help" ]
 	then
 		option_help=true
-	fi
-	
-	if [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
+		
+	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
-	fi
-	
-	if [ "$thisParam" == "-t" ] || [ "$thisParam" == "--timestamp" ]
+		
+	elif [ "$thisParam" == "-t" ] || [ "$thisParam" == "--timestamp" ]
 	then
 		option_timestamp=true
+		
+	else
+		fnc_printTitle
+		
+		echo "error: invalid option $thisParam"
+		echo ""
+		
+		fnc_printHelp
+		exit
 	fi
 done
 
@@ -168,32 +173,29 @@ done
 
 if [ $option_version == true ]
 then
-	fnc_version
+	echo $version
 	exit
 fi
 
 
 
-#Title
-echo "$scriptName version $version"
-echo "by Ugga the Caveman"
-echo ""
+fnc_printTitle
 
 
 
 if [ $option_help == true ]
 then
-	fnc_help
-fi
-
-
-# Checking for root privileges
-if [ "$(whoami)" != "root" ]
-then
-	echo "This script must be run as root."
+	fnc_printHelp
 	exit
 fi
 
+
+
+if [ "$(whoami)" != "root" ]
+then
+        echo "error: This script must be run as root."
+        exit
+fi
 
 
 
