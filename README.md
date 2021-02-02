@@ -7,7 +7,7 @@ unzip the files.
 ```
 7z x main.zip
 ```
-Make files executable.
+Delete the scripts you dont need. Set appropiate permissions.
 ```
 chmod 755 ugga-bash-scripts -R
 ```
