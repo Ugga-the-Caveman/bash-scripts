@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.02.03"
+version="2021.02.04"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_printTitle()
@@ -100,6 +100,7 @@ select selectedProtocols in "${sources[@]}"
 do
 	if [ "$REPLY" -ge "1" ] && [ "$REPLY" -le ${#sources[@]} ];
 	then
+		selectedProtocols="$REPLY"
 		break;
 	else
 		echo "Bad Input. Enter a number between 1 and ${#sources[@]}."
@@ -107,8 +108,6 @@ do
 done
 
 echo ""
-
-
 
 #allow pings?
 option_allowPings=true
@@ -154,7 +153,7 @@ echo "ssh port: $sshPort"
 
 
 echo ""
-echo "The script is about to override iptables now."
+echo "The script is about to override the current iptables."
 read -p "Type yes if you want to continue: " answer
 
 answer=$(echo "$answer" | awk '{print tolower($0)}')
