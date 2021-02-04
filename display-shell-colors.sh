@@ -1,7 +1,15 @@
 #!/bin/bash
 
-version="2021.01.17"
+version="2021.02.4"
 scriptName=$(basename $BASH_SOURCE)
+
+
+function fnc_title()
+{
+	echo "$scriptName version $version"
+	echo "by Ugga the Caveman"
+	echo ""
+}
 
 
 function fnc_help()
@@ -13,13 +21,6 @@ function fnc_help()
 	echo " -h,--help		prints this help message"
 	echo " -v,--version		prints script version"
 	echo ""
-	exit
-}
-
-
-function fnc_version()
-{
-	echo $version
 	exit
 }
 
@@ -39,9 +40,17 @@ do
 		option_help=true
 	fi
 	
-	if [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
+	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
 		option_version=true
+	else
+		fnc_title
+		
+		echo "error: invalid option $thisParam"
+		echo ""
+		
+		fnc_help
+		exit
 	fi
 done
 
@@ -49,16 +58,15 @@ done
 
 if [ $option_version == true ]
 then
-	fnc_version
+	echo $version
 	exit
 fi
 
 
 
-#Title
-echo "$scriptName version $version"
-echo "by Ugga the Caveman"
-echo ""
+
+fnc_title
+
 
 
 
