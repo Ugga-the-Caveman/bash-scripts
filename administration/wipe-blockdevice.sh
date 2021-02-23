@@ -214,7 +214,6 @@ blocksize=$(blockdev --getbsz $device)
 disksize=$(lsblk $device -o SIZE | tail -n 1)
 
 
-echo ""
 echo "Selected Blockdevice: $device"
 echo "Size of Blockdevice: $disksize"
 echo "Block-Size: $blocksize Bytes"
