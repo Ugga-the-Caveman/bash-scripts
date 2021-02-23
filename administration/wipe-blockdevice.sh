@@ -1,17 +1,13 @@
 #!/bin/bash
 
-version="2021.01.14"
+version="2021.02.23"
 scriptName=$(basename $BASH_SOURCE)
 
-function fnc_version()
-{
-	echo $version
-	exit
-}
 
 function fnc_help()
 {
 	echo "Description: Write random bits to BLOCKDEVICE to securely erase all data from it."
+	echo "The script uses /dev/urandom as source for random bits."
 	echo "Usage: shred-blockdevice.sh BLOCKDEVICE [Option]..."
 	echo ""
 	echo " -h,--help		prints this help message"
@@ -20,6 +16,11 @@ function fnc_help()
 	exit
 }
 
+function fnc_version()
+{
+	echo $version
+	exit
+}
 
 #get parameters
 option_version=false
@@ -84,6 +85,7 @@ fi
 function fnc_runtime()
 {
 	runtime=$1
+	
 	runHours=0
 	runMins=0
 	runSecs=0
@@ -207,23 +209,6 @@ fi
 
 
 
-echo "Select the source."
-
-sources=(/dev/zero /dev/random /dev/urandom)
-
-select thisSource in "${sources[@]}"
-do
-	if [ "$REPLY" -ge "1" ] && [ "$REPLY" -le ${#sources[@]} ];
-	then
-		break;
-	else
-		echo "Bad Input. Enter a number between 1 and ${#sources[@]}."
-	fi
-done
-
-
-
-
 blocksize=$(blockdev --getbsz $device)
 
 disksize=$(lsblk $device -o SIZE | tail -n 1)
@@ -233,7 +218,6 @@ echo ""
 echo "Selected Blockdevice: $device"
 echo "Size of Blockdevice: $disksize"
 echo "Block-Size: $blocksize Bytes"
-echo "Selected Inputsource: $thisSource"
 
 
 
@@ -249,8 +233,7 @@ then
 	
 	startingtime=`date +%s`
 	
-	#dd if=$thisSource of=$device bs=$blocksize status=progress
-	sleep 1.23;
+	dd if=/dev/urandom of=$device bs=$blocksize status=progress
 	
 	endingtime=`date +%s`
 	
@@ -262,3 +245,4 @@ then
 else
 	echo "Process canceled."
 fi
+
