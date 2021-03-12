@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.02.04"
+version="2021.03.12"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_printTitle()
@@ -168,7 +168,7 @@ fi
 
 echo ""
 
-if [ "$selectedProtocols" != "1" ]
+if [ "$selectedProtocols" != "3" ]
 then
 	echo "Setting up IPv4 configuration..."
 
@@ -312,7 +312,7 @@ echo "Adding custom rules..."
 
 if [ $option_allowPings == true ]
 then
-	if [ "$selectedProtocols" != "1" ]
+	if [ "$selectedProtocols" != "3" ]
 	then
 		iptables -A CUSTOM -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 	fi
@@ -325,7 +325,7 @@ fi
 
 
 
-if [ "$selectedProtocols" != "1" ]
+if [ "$selectedProtocols" != "3" ]
 then
 	iptables -N SSH
 	iptables -A NEW -p tcp --dport $sshPort -j SSH
@@ -345,7 +345,7 @@ fi
 echo "Setting default policies..."
 
 
-if [ "$selectedProtocols" != "1" ]
+if [ "$selectedProtocols" != "3" ]
 then
 	iptables -P INPUT DROP
 	iptables -P FORWARD DROP
@@ -363,4 +363,5 @@ fi
 
 
 echo "setup complete."
+
 
