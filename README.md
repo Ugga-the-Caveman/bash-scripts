@@ -1,7 +1,7 @@
 ### installation
 Download all files from this repository.
 ```
-wget https://github.com/Ugga-the-Caveman/ugga-bash-scripts/archive/main.zip
+wget https://github.com/Ugga-the-Caveman/ugga_bash_scripts/archive/main.zip
 ```
 
 unzip the files.
