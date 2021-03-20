@@ -96,6 +96,15 @@ then
 	exit
 fi
 
+destinationDir="/usr/ugga_bash_scripts"
+
+echo  "script will overwrite $destinationDir with $thisDir"
+read -p "Are you sure you want to continue? [y/N]: " answer
+
+if [ "${answer:0:1}" == "y" ] || [ "${answer:0:1}" == "Y" ]
+then
+	echo "blöp"
+fi
 
 
 #chmod 755 ugga_bash_scripts -R
