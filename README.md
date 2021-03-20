@@ -6,7 +6,7 @@ wget https://github.com/Ugga-the-Caveman/ugga_bash_scripts/archive/main.zip
 
 unzip the files.
 ```
-7z x main.zip
+7z x main.zip -o ugga_bash_scripts
 ```
 
 Delete the scripts you dont need. 
