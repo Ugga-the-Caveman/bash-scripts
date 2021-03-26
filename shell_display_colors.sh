@@ -38,7 +38,6 @@ do
 	if [ "$thisParam" == "-h" ] || [ "$thisParam" == "--help" ]
 	then
 		option_help=true
-	fi
 	
 	elif [ "$thisParam" == "-v" ] || [ "$thisParam" == "--version" ]
 	then
