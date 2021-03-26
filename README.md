@@ -23,8 +23,8 @@ sudo mv ugga_bash_scripts /usr/ugga_bash_scripts
 
 There is a script that you can use to append the directory including all subdirectories to your path.
 ```
-if [ -f "/usr/bashScripts/shellAppendPath.sh" ]
+if [ -f "/usr/ugga_bash_scripts/shell_path_append_recursive.sh" ]
 then
-  source /usr/bashScripts/shellAppendPath.sh /usr/ugga_bash_scripts
+  source /usr/ugga_bash_scripts/shell_path_append_recursive.sh /usr/ugga_bash_scripts
 fi
 ```
