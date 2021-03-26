@@ -2,7 +2,7 @@
 
 # this script appends given directories and all of the subdirectories to the PATH variable.
 # how to use: source shellAppendpath.sh /dir1 /dir2 /dir3
-
+# export PATH
 
 
 appendpath () {
