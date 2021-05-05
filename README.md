@@ -10,18 +10,12 @@ unzip the files.
 ```
 
 Delete the scripts you dont need. 
-Then set appropiate permissions.
+Then execute this script.
 ```
-chmod 755 ugga_bash_scripts -R
-```
-
-Replace old directory with new one.
-```
-sudo rm -r /usr/ugga_bash_scripts
-sudo mv ugga_bash_scripts /usr/ugga_bash_scripts
+ugga_bash_scripts/install.sh
 ```
 
-There is a script that you can use to append the directory including all subdirectories to your path.
+Add this to your bashrc.
 ```
 if [ -f "/usr/ugga_bash_scripts/shell_path_append_recursive.sh" ]
 then
