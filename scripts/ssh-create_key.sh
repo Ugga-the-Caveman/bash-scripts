@@ -1,7 +1,6 @@
 #!/bin/bash
 
-
-version="2021.01.31"
+version="2021.05.04"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -12,7 +11,7 @@ function fnc_version()
 
 function fnc_help()
 {
-	echo "Description: sets up german locale configuration."
+	echo "Description: Creates a ssh key pair and adds it to the authorized_keys file."
 	echo "Usage: $scriptName [Option]..."
 	echo ""
 	echo " -h,--help		prints this help message"
@@ -21,11 +20,9 @@ function fnc_help()
 	exit
 }
 
-
 #get parameters
 option_version=false
 option_help=false
-device=""
 
 paramArray=( "$@" )
 paramCount=${#paramArray[@]}
@@ -48,8 +45,6 @@ do
 	fi
 done
 
-
-
 if [ $option_version == true ]
 then
 	fnc_version
@@ -57,7 +52,7 @@ then
 fi
 
 
-#Title
+
 echo "$scriptName version $version"
 echo "by Ugga the Caveman"
 echo ""
@@ -70,48 +65,37 @@ then
 fi
 
 
+benutzername="$(whoami)"
 
-if [ "$(whoami)" != "root" ]
+if [ $benutzername == "root" ]
 then
-	echo "This script can only be run as root."
+	echo "You are not allowed to use root for ssh"
+	exit
+fi
+
+
+homedirectory="$(getent passwd $benutzername | cut -d: -f6)"
+
+if [ ! -d "$homedirectory" ]
+then
+	echo "Error: This user has no home directory."
 	exit
 fi
 
 
 
+keyname="localkey"
 
+if [ ! -d "$homedirectory/.ssh" ]
+then
+	mkdir $homedirectory/.ssh
+fi
+	
+rm $homedirectory/.ssh/$keyname-*
 
-echo "LANG=en_DK.UTF-8" > /etc/locale.conf
-echo "LANGUAGE=en_US.UTF-8" >> /etc/locale.conf
-echo "LC_MONETARY=de_DE.UTF-8" >> /etc/locale.conf
+ssh-keygen -t ed25519 -o -a 100 -f "$homedirectory/.ssh/$keyname-private" -N "" < /dev/null
+mv "$homedirectory/.ssh/$keyname-private.pub" "$homedirectory/.ssh/$keyname-public"
 
-echo "#/etc/locale.conf"
-cat /etc/locale.conf
-echo ""
-
-
-
-
-echo "KEYMAP=de-latin1" > /etc/vconsole.conf
-echo "FONT=lat9w-16" >> /etc/vconsole.conf
-
-echo "#/etc/vconsole.conf"
-cat /etc/vconsole.conf
-echo ""
-
-
-
-
-ln -sfv /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-
-
-
-
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "en_DK.UTF-8 UTF-8" >> /etc/locale.gen
-echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
-
-echo ""
-
-locale-gen
-
+cat "$homedirectory/.ssh/$keyname-public" >> "$homedirectory/.ssh/authorized_keys"
+	
+cat "$homedirectory/.ssh/$keyname-private"
