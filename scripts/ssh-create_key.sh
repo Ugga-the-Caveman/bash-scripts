@@ -93,9 +93,9 @@ fi
 	
 rm $homedirectory/.ssh/$keyname-*
 
-ssh-keygen -t ed25519 -o -a 100 -f "$homedirectory/.ssh/$keyname-private" -N "" < /dev/null
+ssh-keygen -t ed25519 -o -a 100 -f "$homedirectory/.ssh/$keyname-private" -N "" < /dev/null >> /dev/null
 mv "$homedirectory/.ssh/$keyname-private.pub" "$homedirectory/.ssh/$keyname-public"
 
 cat "$homedirectory/.ssh/$keyname-public" >> "$homedirectory/.ssh/authorized_keys"
-	
+
 cat "$homedirectory/.ssh/$keyname-private"
