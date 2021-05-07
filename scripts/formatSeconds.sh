@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.05.02"
+version="2021.05.07"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -182,6 +182,7 @@ function fnc_runtime()
 if [ "$runtime" != "" ]
 then
 	fnc_runtime $runtime
+	echo ""
 fi
 
 
