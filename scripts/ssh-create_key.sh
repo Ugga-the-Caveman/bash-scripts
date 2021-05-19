@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.05.04"
+version="2021.05.19"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -84,18 +84,34 @@ fi
 
 
 
-keyname="localkey"
+
 
 if [ ! -d "$homedirectory/.ssh" ]
 then
 	mkdir $homedirectory/.ssh
 fi
-	
-rm $homedirectory/.ssh/$keyname-*
+
+
+
+keyname="localkey"
+
+if [ -e "$homedirectory/.ssh/$keyname-public" ]
+then
+	rm "$homedirectory/.ssh/$keyname-public"
+fi
+
+if [ -e "$homedirectory/.ssh/$keyname-private" ]
+then
+	rm "$homedirectory/.ssh/$keyname-private"
+fi
+
+
 
 ssh-keygen -t ed25519 -o -a 100 -f "$homedirectory/.ssh/$keyname-private" -N "" < /dev/null >> /dev/null
 mv "$homedirectory/.ssh/$keyname-private.pub" "$homedirectory/.ssh/$keyname-public"
 
 cat "$homedirectory/.ssh/$keyname-public" >> "$homedirectory/.ssh/authorized_keys"
 
-cat "$homedirectory/.ssh/$keyname-private"
+
+
+#cat "$homedirectory/.ssh/$keyname-private"
