@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.02.02"
+version="2021.05.25"
 scriptName=$(basename $BASH_SOURCE)
 
 
@@ -238,9 +238,21 @@ fi
 
 
 
-echo "The script is about to backup the system."
-echo "All files in DIRECTORY will be overwritten."
+echo "The script is about to backup the system into DIRECTORY."
 echo "DIRECTORY: $thisDir"
+
+
+if [ -d "$thisDir" ]
+then
+	if [ ! -z "$(ls -A $thisDir)" ]
+	then
+		echo "Warning: Directory is not Empty."
+	fi
+fi
+
+
+
+
 echo ""
 read -p "Are you sure you want to continue? [y/N]: " answer
 
