@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.05.19"
+version="2021.06.28"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -11,7 +11,7 @@ function fnc_version()
 
 function fnc_help()
 {
-	echo "Description: Creates a ssh key pair and adds it to the authorized_keys file."
+	echo "Description: Creates a ssh key pair for the current user and adds it to the authorized_keys file."
 	echo "Usage: $scriptName [Option]..."
 	echo ""
 	echo " -h,--help		prints this help message"
@@ -69,7 +69,7 @@ benutzername="$(whoami)"
 
 if [ $benutzername == "root" ]
 then
-	echo "You are not allowed to use root for ssh"
+	echo "You are not allowed to use the root user"
 	exit
 fi
 
