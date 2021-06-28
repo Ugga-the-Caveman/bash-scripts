@@ -10,7 +10,7 @@ unzip the files.
 ```
 
 Delete the scripts you dont need. 
-Then execute this script.
+Then execute the installation script, which is inside the directory.
 ```
 ugga_bash_scripts/install.sh
 ```
