@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="2021.05.04"
+version="2021.06.28"
 scriptName=$(basename $BASH_SOURCE)
 
 function fnc_version()
@@ -118,6 +118,10 @@ fi
 
 
 
+groupName="ssh-grp"
+
+
+
 echo ""
 echo "The script is about to move the content of /etc/ssh into /root/ssh-backup."
 echo "After that it will create new configuration and key files."
@@ -223,8 +227,6 @@ echo "New host_keys created."
 
 
 
-
-groupName="ssh-grp"
 
 groupExist=$(cat /etc/group | grep "$groupName:")
 
